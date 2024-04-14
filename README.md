@@ -13,11 +13,12 @@ and make changes to integrate we could have another type of `Client` in `forward
 which implements `forwarder.Client` interface
 - Given I was asked to implement only 2 methods limited the RPC calls that could be done
 to Polygon to the methods specified
+- Given this will be an API exposed to public internet, added a basic rate limiter for all API endpoints
 
 ## Endpoints
 
-- `/rpc`: Main endpoint for clients to intereact with. Whatever sent in the post body
-will be forwarded to Polygon-rpc endpoint. Returns the response headers and body from the polygon-rpc as response
+- `/rpc`: Gets the JSONRPC request as post body, forwards request to polygon and replies with the header + response body. 
+This endpoint has retry mechanism to retry 3 times for the failed requests
 - `/metrics`: Endpoint for Prometheus scrapers to collect metrics for the running process
 - `/health`: Health endpoint for LB usage, it is simplistic at the moment. If we were using
 a database etc a ping to there could be added just as a simple check.
@@ -43,7 +44,7 @@ docker build -t trust-wallet-homework .
 # Terraform
 
 ## Assumptions
-- Due to time restriction didn't implement TLS connection to ALB as it requires a custom domain and further configuration
+- Due to time restriction didn't implement TLS connection to ALB as it requires a custom domain and a certificate
 - Given this is just deploying one application didn't implement separate modules for VPC, ECS and LB. On a larger Terraform code base abstracting these away
 with a module would be more maintainable
 
