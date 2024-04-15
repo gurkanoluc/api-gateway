@@ -13,7 +13,7 @@ us to have more observable system
 ## Security
 - As it wasn't in the spec I didn't implement it, but ideally this API endpoint should be accesible with a per client token, so we could know who are the clients, who are the heavy hitters
 - Since it would require me to have a custom domain and a certificate, didn't implement TLS. Would run the service with TLS in production.
-- In addition to rate limiter we have put a CDN for DDos protection and better performance
+- In addition to rate limiter we could put a CDN for DDos protection and better performance
 
 
 # API Gateway
