@@ -1,3 +1,21 @@
+# Production changes
+
+## Scalability
+- App is currently deployed in 1 region and all ECS tasks are running in one AZ, for world wide good performance and HA would deploy it to multiple regions and AZs
+- Would have auto-scaling to handle surge in the traffic without human intervention
+
+## Observability
+
+- Due to time restrictions added basic metrics which allows me to get RPS and latency. In production environment there will be metric / trace interceptors that would allow
+us to have more observable system
+- Didn't add as it wasn't in spec, but would generate a request ID for each incoming request and refer to that in all logs
+
+## Security
+- As it wasn't in the spec I didn't implement it, but ideally this API endpoint should be accesible with a per client token, so we could know who are the clients, who are the heavy hitters
+- Since it would require me to have a custom domain and a certificate, didn't implement TLS. Would run the service with TLS in production.
+- In addition to rate limiter we have put a CDN for DDos protection and better performance
+
+
 # API Gateway
 
 ## Code
