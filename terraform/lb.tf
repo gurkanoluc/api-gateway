@@ -1,15 +1,15 @@
+# ALB
 resource "aws_alb" "application_load_balancer" {
-  name               = "api-gateway-lb" #load balancer name
+  name               = "api-gateway-lb"
   load_balancer_type = "application"
   subnets = [
     "${aws_subnet.public_subnet_a.id}",
     "${aws_subnet.public_subnet_b.id}"
   ]
-  # security group
   security_groups = ["${aws_security_group.load_balancer_security_group.id}"]
 }
 
-# Create a security group for the load balancer:
+# ALB SG
 resource "aws_security_group" "load_balancer_security_group" {
   vpc_id = aws_vpc.app_vpc.id
 
@@ -17,7 +17,7 @@ resource "aws_security_group" "load_balancer_security_group" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # Allow traffic in from all sources
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
@@ -35,6 +35,7 @@ resource "aws_security_group" "load_balancer_security_group" {
   }
 }
 
+# Target Group
 resource "aws_lb_target_group" "target_group" {
   name        = "target-group"
   port        = 80
@@ -55,6 +56,7 @@ resource "aws_lb_target_group" "target_group" {
   }
 }
 
+# ALB Listener
 resource "aws_lb_listener" "listener" {
   load_balancer_arn = aws_alb.application_load_balancer.arn
   port              = "80"
@@ -64,7 +66,6 @@ resource "aws_lb_listener" "listener" {
     target_group_arn = aws_lb_target_group.target_group.arn
   }
 }
-
 
 output "app_url" {
   value = aws_alb.application_load_balancer.dns_name

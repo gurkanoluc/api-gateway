@@ -1,16 +1,20 @@
+# ECR Repository
 resource "aws_ecr_repository" "app_ecr_repo" {
   name = "api-gateway"
 }
 
+# ECS Cluster
 resource "aws_ecs_cluster" "api_gateway_cluster" {
   name = "api-gateway-cluster"
 }
 
+# CloudWatch Log Group
 resource "aws_cloudwatch_log_group" "api-gateway-server-group" {
   name              = "/ecs/api-gateway-server"
   retention_in_days = 30
 }
 
+# ECS Task Definition
 resource "aws_ecs_task_definition" "api_gateway_server_task" {
   family                   = "api-gateway-server"
   container_definitions    = <<DEFINITION
@@ -44,6 +48,7 @@ resource "aws_ecs_task_definition" "api_gateway_server_task" {
   execution_role_arn       = aws_iam_role.ecsTaskExecutionRole.arn
 }
 
+# ECS Task Execution Role
 resource "aws_iam_role" "ecsTaskExecutionRole" {
   name               = "ecsTaskExecutionRole"
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
@@ -65,6 +70,7 @@ resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
+# ECS Service
 resource "aws_ecs_service" "api-gateway-server-service" {
   name            = "api-gateway-server-service"
   cluster         = aws_ecs_cluster.api_gateway_cluster.id

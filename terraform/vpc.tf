@@ -1,3 +1,4 @@
+# Main VPC
 resource "aws_vpc" "app_vpc" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_support   = true
@@ -7,6 +8,7 @@ resource "aws_vpc" "app_vpc" {
   }
 }
 
+# Public Subnets
 resource "aws_subnet" "public_subnet_a" {
   vpc_id            = aws_vpc.app_vpc.id
   availability_zone = "eu-west-1a"
@@ -27,6 +29,7 @@ resource "aws_subnet" "public_subnet_b" {
   }
 }
 
+# Private Subnet
 resource "aws_subnet" "private_subnet" {
   vpc_id            = aws_vpc.app_vpc.id
   availability_zone = "eu-west-1a"

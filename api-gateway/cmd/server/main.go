@@ -115,7 +115,6 @@ func newHTTPClient() *http.Client {
 		Timeout:   time.Second * 10,
 		Transport: netTransport,
 	}
-
 }
 
 func parseLogLevel(logLevel string) zapcore.Level {
